@@ -1,5 +1,41 @@
 ---
+import PlaylistItemCard from "@/components/PlaylistItemCard.astro"
+import PlaylistItemSmallCard from "@/components/PlaylistItemSmallCard.astro"
+import { playlists } from "@/lib/data"
 import Layout from "../layouts/Layout.astro"
 ---
 
-<Layout title="Spotify Clone" />
+<Layout title="Spotify Clone">
+  <div
+    id="playlist-container"
+    class="relative transition-all duration-1000 bg-green-700 p-4"
+  >
+    <div
+      class="absolute inset-0 bg-gradient-to-t from-zinc-900 via-zinc-900/80"
+    >
+    </div>
+    <!-- Header / Login-->
+    <div class=""></div>
+    <div class="relative z-10 px-2 pt-12">
+      <!-- Greeting  -->
+      <h1 class="text-3xl font-bold mb-4">Good afternoon</h1>
+
+      <!-- Playlist card -->
+      <div class="grid grid-cols-3 gap-3">
+        {
+          playlists.map((playlist) => (
+            <PlaylistItemSmallCard playlist={playlist} />
+          ))
+        }
+      </div>
+
+      <!-- ForYou  -->
+      <h1 class="text-2xl font-bold mb-4 mt-7">Made For You</h1>
+
+      <!-- Playlist square -->
+      <div class="flex flex-wrap mt-6 gap-4">
+        {playlists.map((playlist) => <PlaylistItemCard playlist={playlist} />)}
+      </div>
+    </div>
+  </div>
+</Layout>
