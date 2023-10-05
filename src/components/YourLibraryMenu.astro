@@ -1,0 +1,32 @@
+---
+import LibraryIcon from "@/icons/Library.astro"
+import PlusIcon from "@/icons/Plus.astro"
+import RightArrowIcon from "@/icons/RightArrow.astro"
+interface Props {
+  href?: string
+}
+
+const { href } = Astro.props
+---
+
+<li>
+  <a
+    class="flex flex-row gap-4 justify-between text-zinc-400 font-bold items-center py-2 px-4"
+    href={href}
+  >
+    <div
+      class="flex flex-row gap-2 hover:text-zinc-100 transition duration-300"
+    >
+      <LibraryIcon />
+      <span class="ml-1">Your Library</span>
+    </div>
+    <div class="flex flex-row gap-6">
+      <div class="hover:text-zinc-100 transition duration-300">
+        <PlusIcon />
+      </div>
+      <div class="hover:text-zinc-100 transition duration-300">
+        <RightArrowIcon />
+      </div>
+    </div>
+  </a>
+</li>
