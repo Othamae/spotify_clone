@@ -1,0 +1,14 @@
+---
+const currentTime = new Date()
+
+const currentHour = currentTime.getHours()
+
+const greeting =
+  currentHour < 12
+    ? "Good moorning"
+    : currentHour < 18
+    ? "Good afternoon"
+    : "Good night"
+---
+
+<h1 class="text-3xl font-bold mb-4">{greeting}</h1>
