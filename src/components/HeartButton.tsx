@@ -1,26 +1,19 @@
 import EmptyHeart from "@/icons/EmptyHeart"
 import FillHeart from "@/icons/FillHeart"
-
+import { usePlayerStore } from "@/store/playerStore"
 
 const HeartButton = () => {
-    const liked = false
+    const isLiked = usePlayerStore(state => state.isLiked)
+    const setIsLiked = usePlayerStore(state => state.setIsLiked)
+    const handleClick = () => {
+        setIsLiked(!isLiked)
+    }
     return (
         <>
-            {
-                !liked
-                    ?
-                    (
-                        <button className="text-gray-400 hover:text-white hover:scale-[1.03]">
-                            <EmptyHeart />
-                        </button>
-                    )
-                    :
-                    (
-                        <button className="text-green-500 hover:scale-[1.03]">
-                            <FillHeart />
-                        </button>
-                    )
-            }
+            <button onClick={handleClick}
+                className={` ${isLiked ? 'text-green-500 hover:scale-[1.03]' : 'text-gray-400 hover:text-white hover:scale-[1.03]'}`}>
+                {!isLiked ? <EmptyHeart /> : <FillHeart />}
+            </button>
         </>
     )
 }
