@@ -1,21 +1,24 @@
 ---
+import SongListTable from "@/components/SongListTable.astro"
 import { allPlaylists, songs } from "@/lib/data"
 import Layout from "../../layouts/Layout.astro"
 const { id } = Astro.params
 
 const playlist = allPlaylists.find((playlist) => playlist.id === id)
-
+const color = playlist?.color.dark
+console.log({ color })
 const playListSongs = songs.filter((song) => song.albumId === playlist?.albumId)
 ---
 
 <Layout title="Spotify Clone">
   <div
     id="playlist-container"
-    class="relative flex flex-col bg-zinc-900 overflow-x-hidden"
-    transition:name=`playlist ${id} box`
+    style=`--context-color:${color}`
+    class=`relative flex flex-col bg-gradient-to-b from-context overflow-x-hidden p-6`
+    transition:name=`playlist ${playlist?.id} box`
   >
     <!-- Header / Login-->
-    <header class="flex flex-row gap-8">
+    <header class="flex flex-row gap-6">
       <picture class="aspect-square w-52 h-52 flex-none">
         <img
           src={playlist?.cover}
@@ -39,17 +42,33 @@ const playListSongs = songs.filter((song) => song.albumId === playlist?.albumId)
               <span>{playlist?.artists.join(", ")}</span>
             </div>
             <p class="mt-1">
-              <span class="text-white">{songs.length} songs</span>, about 3 hr
-              15 min
+              <span class="text-white">{playListSongs.length} songs</span>,
+              about 3 hr 15 min
             </p>
           </div>
         </div>
       </div>
     </header>
+
     <div
-      class="absolute inset-0 bg-gradient-to-t from-zinc-900 via-zinc-900/80 -z-[1]"
+      class=`absolute inset-0 bg-gradient-to-b from-[${color}] via-zinc-900/80 -z-[1]`
     >
     </div>
-    <div class="relative z-10 px-2 pt-12"></div>
+
+    <!-- <div
+      class={`absolute inset-0 ${
+        color
+          ? `bg-gradient-to-b from-[${color}] via-[${color}]/80`
+          : "bg-gradient-to-b from-zinc-900 via-zinc-900/80"
+      } -z-[1]`}
+    >
+    </div> -->
+    <!-- <div class="relative z-10 px-2 pt-12"></div> -->
+
+    <section class="pt-6">
+      <SongListTable songs={playListSongs} />
+    </section>
   </div>
+
+  <!--  class="absolute inset-0 bg-gradient-to-t from-zinc-900 via-zinc-900/80 -z-[1]" -->
 </Layout>
