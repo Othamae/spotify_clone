@@ -8,16 +8,20 @@ interface CurrentTrackType {
 }
 
 export interface PlayerStoreStateType {
-    isPlaying: boolean;
-    currentTrack: CurrentTrackType;
-    setIsPlaying: (isPlaying: boolean) => void;
-    setCurrentTrack: (currentTrack: CurrentTrackType) => void;
+    isPlaying: boolean
+    isLiked: boolean
+    currentTrack: CurrentTrackType
+    setIsPlaying: (isPlaying: boolean) => void
+    setIsLiked: (isLiked: boolean) => void
+    setCurrentTrack: (currentTrack: CurrentTrackType) => void
 }
 
 
 export const usePlayerStore = create<PlayerStoreStateType>((set) => ({
     isPlaying: false,
+    isLiked: false,
     currentTrack: { playlist: null, song: null, listOfSongs: [] },
     setIsPlaying: (isPlaying: boolean) => set({ isPlaying }),
+    setIsLiked: (isLiked: boolean) => set({ isLiked }),
     setCurrentTrack: (currentTrack: CurrentTrackType) => set({ currentTrack })
 }))
