@@ -1,5 +1,6 @@
 ---
 import type { Playlist } from "@/lib/data"
+import PlayButtonPlaylist from "./PlayButtonPlaylist"
 interface Props {
   playlist: Playlist
 }
@@ -12,8 +13,14 @@ const artistListString = artists.join(", ")
 ---
 
 <article
-  class="bg-zinc-800 shadow-lg hover:shadow-xl hover:bg-zinc-500/30 w-44"
+  class="group relative bg-zinc-800 shadow-lg hover:shadow-xl hover:bg-zinc-500/30 w-44"
 >
+  <div
+    class="absolute right-0 bottom-28 z-10 opacity-0 translate-y-2 transition-all duration-500
+  group-hover:opacity-100 group-hover:translate-y-0"
+  >
+    <PlayButtonPlaylist />
+  </div>
   <a
     href={`/playlist/${id}`}
     class="playlist-item flex flex-col relative transition-all duration-300 p-2 overflow-hidden gap-3 pb-4 rounded-md"
