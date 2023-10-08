@@ -3,12 +3,15 @@ import PlayIcon from '@/icons/PlayerPlay'
 import { usePlayerStore } from '@/store/playerStore'
 import { useEffect, useRef } from 'react'
 import CurrentSong from './CurrentSong'
+import Volume from './Volume'
 
 export function Player() {
     const isPlaying = usePlayerStore(state => state.isPlaying)
     const setIsPlaying = usePlayerStore(state => state.setIsPlaying)
     const currentMusic = usePlayerStore(state => state.currentMusic)
     const setCurrentMusic = usePlayerStore(state => state.setCurrentMusic)
+    const volume = usePlayerStore(state => state.volume)
+    const setVolume = usePlayerStore(state => state.setVolume)
     const audioRef = useRef<HTMLAudioElement | null>(null)
 
     useEffect(() => {
@@ -19,6 +22,10 @@ export function Player() {
         )
     }, [isPlaying])
 
+    useEffect(() => {
+        audioRef.current && (audioRef.current.volume = volume)
+    }, [volume])
+
 
     useEffect(() => {
         const { song, playlist } = currentMusic
@@ -26,6 +33,7 @@ export function Player() {
             const src = `/music/${playlist?.id}/0${song.id}.mp3`
             audioRef.current && (
                 audioRef.current.src = src,
+                audioRef.current.volume = volume,
                 audioRef.current.play()
             )
         }
@@ -49,15 +57,13 @@ export function Player() {
                         className='bg-white rounded-full p-1 text-black'>
                         {isPlaying ? <PauseIcon /> : <PlayIcon />}
                     </button>
+                    <audio ref={audioRef} />
                 </div>
-
-
             </div>
-            <div>
-                Volumen
+            <div className='grid place-content-center'>
+                <Volume />
             </div>
 
-            <audio ref={audioRef} />
 
         </div>
     )
