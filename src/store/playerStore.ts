@@ -10,9 +10,11 @@ interface CurrentMusicType {
 export interface PlayerStoreStateType {
     isPlaying: boolean
     isLiked: boolean
+    volume: number
     currentMusic: CurrentMusicType
     setIsPlaying: (isPlaying: boolean) => void
     setIsLiked: (isLiked: boolean) => void
+    setVolume: (volume: number) => void
     setCurrentMusic: (currentMusic: CurrentMusicType) => void
 }
 
@@ -20,8 +22,10 @@ export interface PlayerStoreStateType {
 export const usePlayerStore = create<PlayerStoreStateType>((set) => ({
     isPlaying: false,
     isLiked: false,
+    volume: 1,
     currentMusic: { playlist: null, song: null, listOfSongs: [] },
     setIsPlaying: (isPlaying: boolean) => set({ isPlaying }),
     setIsLiked: (isLiked: boolean) => set({ isLiked }),
+    setVolume: (volume: number) => set({ volume }),
     setCurrentMusic: (currentMusic: CurrentMusicType) => set({ currentMusic })
 }))
