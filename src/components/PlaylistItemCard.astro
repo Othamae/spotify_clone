@@ -19,7 +19,7 @@ const artistListString = artists.join(", ")
     class="absolute right-0 bottom-28 z-10 opacity-0 translate-y-2 transition-all duration-500
   group-hover:opacity-100 group-hover:translate-y-0"
   >
-    <PlayButtonPlaylist />
+    <PlayButtonPlaylist id={id} client:visible />
   </div>
   <a
     href={`/playlist/${id}`}
