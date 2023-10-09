@@ -1,6 +1,9 @@
 ---
+import ButtonPlaySong from "@/components/ButtonPlaySong"
+import SongTitle from "@/components/SongTitle"
 import TimeIcon from "@/icons/Time.astro"
 import type { Song } from "@/lib/data"
+import HeartButton from "./HeartButton"
 interface Props {
   songs: Song[]
 }
@@ -13,15 +16,23 @@ const { songs } = Astro.props
     <th class="pl-4 w-6 text-center text-lg">#</th>
     <th class="px-4 py-2 font-normal">Title</th>
     <th class="px-4 py-2 font-normal">Album</th>
+    <th class="w-6"></th>
     <th class="px-4 py-2 font-normal"><TimeIcon /></th>
   </thead>
   <tbody class="">
     <td class="h-[20px]"></td>
     {
       songs.map((song, index) => (
-        <tr class="border-separate border-spacing-0 text-sm text-gray-300/80 hover:bg-white/10 hover:text-white transition-all duration-300">
+        <tr class="group border-separate border-spacing-0 text-sm text-gray-300/80 hover:bg-white/10 hover:text-white transition-all duration-300">
           <td class="pl-4 py-2 rounded-tl-[4px] rounded-bl-[4px] text-base">
-            {index + 1}
+            <div class="group relative items-center">
+              <ButtonPlaySong
+                songId={song.id}
+                playlistId={song.albumId}
+                index={index + 1}
+                client:visible
+              />
+            </div>
           </td>
           <td class="px-4 py-2">
             <div class="playlist-item flex flex-row relative  gap-2  ">
@@ -33,12 +44,14 @@ const { songs } = Astro.props
                 />
               </picture>
               <div class="flex flex-auto flex-col px-2 justify-start align-baseline  ">
-                <h3 class="text-base text-white font-normal">{song.title}</h3>
-                <span class="text-sm">{song.artists.join(", ")}</span>
+                <SongTitle song={song} client:visible />
               </div>
             </div>
           </td>
           <td class="px-4 py-2">{song.album}</td>
+          <td class="opacity-0 group-hover:opacity-100 pt-1">
+            <HeartButton className="w-4 h-4" client:visible />
+          </td>
           <td class="px-4 py-2 rounded-tr-[4px] rounded-br-[4px] text-zinc-400">
             {song.duration}
           </td>
