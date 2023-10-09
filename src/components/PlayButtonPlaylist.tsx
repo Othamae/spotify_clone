@@ -18,16 +18,16 @@ const PlayButtonPlaylist: React.FC<PlayButtonPlaylistProps> = ({ className, id }
 
     const handleClick = () => {
         if (isPlayingPlaylist) {
-            setIsPlaying(false)
+            setIsPlaying(!isPlaying)
             return
         }
 
         fetch(`/api/getPlayList?id=${id}`)
             .then(res => res.json())
             .then(data => {
-                const { playlist, listOfSongs } = data
+                const { playlist, listOfSongs, firstSongId } = data
                 setIsPlaying(true)
-                setCurrentMusic({ playlist, listOfSongs, song: listOfSongs[0] })
+                setCurrentMusic({ playlist, listOfSongs, song: listOfSongs[firstSongId - 1] })
             })
     }
 
@@ -36,7 +36,7 @@ const PlayButtonPlaylist: React.FC<PlayButtonPlaylistProps> = ({ className, id }
             onClick={handleClick}
             className={`text-black bg-green-500 rounded-full p-2 mr-4 shadow-lg shadow-gray-900 ${className}`}
         >
-            {isPlayingPlaylist ? <PauseIcon /> : <PlayIcon />}
+            {isPlayingPlaylist ? <PauseIcon /> : <PlayIcon className="w-8 h-8" />}
 
         </button>
     )
