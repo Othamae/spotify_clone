@@ -25,7 +25,7 @@ const ButtonPlaySong: React.FC<ButtonPlaySongProps> = ({ songId, playlistId, ind
             .then(data => {
                 const { playlist, listOfSongs } = data
                 setIsPlaying(true)
-                setCurrentMusic({ playlist, listOfSongs, song: listOfSongs[songId - 1] })
+                setCurrentMusic({ ...currentMusic, playlist, listOfSongs, song: listOfSongs[songId - 1] })
             })
     }
 
