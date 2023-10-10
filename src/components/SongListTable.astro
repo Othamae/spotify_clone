@@ -3,11 +3,10 @@ import ButtonPlaySong from "@/components/ButtonPlaySong"
 import SongTitle from "@/components/SongTitle"
 import TimeIcon from "@/icons/Time.astro"
 import type { Song } from "@/lib/data"
-import HeartButton from "./HeartButton"
+import LikeSongButton from "./LikeSongButton"
 interface Props {
   songs: Song[]
 }
-
 const { songs } = Astro.props
 ---
 
@@ -49,8 +48,13 @@ const { songs } = Astro.props
             </div>
           </td>
           <td class="px-4 py-2">{song.album}</td>
-          <td class="opacity-0 group-hover:opacity-100 pt-1">
-            <HeartButton className="w-4 h-4" client:visible />
+          <td class=" pt-1">
+            <LikeSongButton
+              song={song}
+              className="w-4 h-4"
+              hidden
+              client:only
+            />
           </td>
           <td class="px-4 py-2 rounded-tr-[4px] rounded-br-[4px] text-zinc-400">
             {song.duration}
