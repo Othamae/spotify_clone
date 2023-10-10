@@ -15,9 +15,7 @@ const SongTitle: React.FC<SongTitleProps> = ({ song }) => {
 
     return (
         <>
-            <h3
-                className={`text-base ${isPlayingSong ? "text-green-400" : " text-white"
-                    } font-normal`}
+            <h3 className={`text-base ${isPlayingSong ? "text-green-400" : " text-white"} font-normal`}
             >
                 {song.title}
             </h3>
