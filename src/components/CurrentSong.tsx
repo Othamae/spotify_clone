@@ -1,5 +1,5 @@
 import { usePlayerStore } from "@/store/playerStore"
-import HeartButton from "./HeartButton"
+import LikeSongButton from "./LikeSongButton"
 
 const CurrentSong = () => {
     const currentMusic = usePlayerStore(state => state.currentMusic)
@@ -13,7 +13,9 @@ const CurrentSong = () => {
                 <span className="text-xs text-gray-400">{currentMusic?.song?.artists.join(', ')}</span>
             </div>
             <div className="">
-                <HeartButton className="w-4 h-4" />
+                {
+                    currentMusic?.song && <LikeSongButton song={currentMusic?.song} className="w-4 h-4 " />
+                }
             </div>
         </div>
     )
