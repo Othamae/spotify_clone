@@ -1,5 +1,5 @@
 ---
-import HeartButton from "@/components/HeartButton"
+import LikePlaylistButton from "@/components/LikePlaylistButton"
 import PlayButtonPlaylist from "@/components/PlayButtonPlaylist"
 import SongListTable from "@/components/SongListTable.astro"
 import { allPlaylists, songs } from "@/lib/data"
@@ -8,6 +8,7 @@ const { id } = Astro.params
 
 const playlist = allPlaylists.find((playlist) => playlist.id === id)
 const color = playlist?.color.dark
+const playListId = playlist?.albumId
 
 const playListSongs = songs.filter((song) => song.albumId === playlist?.albumId)
 ---
@@ -73,7 +74,7 @@ const playListSongs = songs.filter((song) => song.albumId === playlist?.albumId)
         className="p-3 hover:scale-[1.03] hover:bg-green-400/95"
         client:visible
       />
-      <HeartButton className="w-8 h-8" client:visible />
+      <LikePlaylistButton className="w-8 h-8" playList={playlist} client:only />
     </div>
 
     <section class="pt-6">
@@ -83,3 +84,4 @@ const playListSongs = songs.filter((song) => song.albumId === playlist?.albumId)
     <!--  class="absolute inset-0 bg-gradient-to-t from-zinc-900 via-zinc-900/80 -z-[1]" -->
   </div>
 </Layout>
+ @/components/LikePlaylistButton
