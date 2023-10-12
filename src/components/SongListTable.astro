@@ -29,7 +29,7 @@ const { songs } = Astro.props
                 songId={song.id}
                 playlistId={song.albumId}
                 index={index + 1}
-                client:visible
+                client:only
               />
             </div>
           </td>
