@@ -43,7 +43,7 @@ const { songs } = Astro.props
                 />
               </picture>
               <div class="flex flex-auto flex-col px-2 justify-start align-baseline  ">
-                <SongTitle song={song} client:visible />
+                <SongTitle song={song} client:only />
               </div>
             </div>
           </td>
