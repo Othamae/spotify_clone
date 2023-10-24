@@ -1,5 +1,6 @@
 ---
 import LikePlaylistButton from "@/components/LikePlaylistButton"
+import LikeUserPlaylistButton from "@/components/LikeUserPlaylistButton"
 import PlayButtonPlaylist from "@/components/PlayButtonPlaylist"
 import SongListTable from "@/components/SongListTable.astro"
 import UserSongListTable from "@/components/UserSongListTable.astro"
@@ -100,7 +101,21 @@ if (token && id) {
         className="p-3 hover:scale-[1.03] hover:bg-green-400/95"
         client:visible
       />
-      <LikePlaylistButton className="w-8 h-8" playList={playlist} client:only />
+      {
+        listOfTracks.length > 1 ? (
+          <LikeUserPlaylistButton
+            className="w-8 h-8"
+            playListId={id || ""}
+            client:only
+          />
+        ) : (
+          <LikePlaylistButton
+            className="w-8 h-8"
+            playList={playlist}
+            client:only
+          />
+        )
+      }
     </div>
 
     <section class="pt-6">
