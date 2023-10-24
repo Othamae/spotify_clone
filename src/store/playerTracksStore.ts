@@ -10,12 +10,12 @@ interface CurrentMusicPlayerType {
 
 export interface PlayerTrackStoreStateType {
     isPlaying: boolean
-    LikePlaylists: PlaylistType[]
+    LikePlaylists: String[]
     LikeTracks: Track[]
     volume: number
     currentSpotyMusic: CurrentMusicPlayerType
     setIsPlaying: (isPlaying: boolean) => void
-    setLikePlaylists: (LikePlaylists: PlaylistType[]) => void
+    setLikePlaylists: (LikePlaylists: String[]) => void
     setLikeTracks: (LikeTracks: Track[]) => void
     setVolume: (volume: number) => void
     setCurrentSpotyMusic: (currentSpotyMusic: CurrentMusicPlayerType) => void
@@ -29,7 +29,7 @@ export const usePlayerTrackStore = create<PlayerTrackStoreStateType>((set) => ({
     volume: 1,
     currentSpotyMusic: { playlist: null, track: null, listOfTracks: [], likePlaylist: false },
     setIsPlaying: (isPlaying: boolean) => set({ isPlaying }),
-    setLikePlaylists: (LikePlaylists: PlaylistType[]) => set({ LikePlaylists }),
+    setLikePlaylists: (LikePlaylists: String[]) => set({ LikePlaylists }),
     setLikeTracks: (LikeTracks: Track[]) => set({ LikeTracks }),
     setVolume: (volume: number) => set({ volume }),
     setCurrentSpotyMusic: (currentSpotyMusic: CurrentMusicPlayerType) => set({ currentSpotyMusic })
