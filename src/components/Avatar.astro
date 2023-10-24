@@ -1,0 +1,28 @@
+---
+import type { Image } from "@/types/types"
+interface Props {
+  image: Image
+}
+
+const { image } = Astro.props
+
+const { url } = image
+---
+
+<button class="logout">
+  <img
+    class="w-10 h-10 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
+    src={url}
+    alt="Bordered avatar"
+  />
+</button>
+
+<script>
+  const button = document.querySelector("button.logout")
+
+  if (button)
+    button.addEventListener("click", () => {
+      Astro.cookies.delete("access_token")
+      Astro.cookies.delete("refresh_token")
+    })
+</script>
