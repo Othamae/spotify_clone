@@ -2,7 +2,10 @@
 import LikePlaylistButton from "@/components/LikePlaylistButton"
 import PlayButtonPlaylist from "@/components/PlayButtonPlaylist"
 import SongListTable from "@/components/SongListTable.astro"
+import UserSongListTable from "@/components/UserSongListTable.astro"
 import { allPlaylists, songs } from "@/lib/data"
+import type { Image, PlayListTrackObject } from "@/types/types"
+import { getDuration, getPlaylist } from "@/utils/playlist"
 import Layout from "../../layouts/Layout.astro"
 const { id } = Astro.params
 
@@ -11,6 +14,24 @@ const color = playlist?.color.dark
 const playListId = playlist?.albumId
 
 const playListSongs = songs.filter((song) => song.albumId === playlist?.albumId)
+
+const token = Astro.cookies.get("access_token")?.value
+
+let listOfTracks: PlayListTrackObject[] = []
+let title = ""
+let listOfimages: Image[] = []
+let duration = ""
+if (token && id) {
+  const res = await getPlaylist(token, id)
+  const { tracks, images, name } = res
+  title = name
+  listOfimages = images
+  listOfTracks = tracks.items
+  let durationInMs = 0
+  listOfTracks.map((track) => (durationInMs += track.track.duration_ms))
+
+  duration = getDuration(durationInMs)
+}
 ---
 
 <Layout title="Spotify Clone">
@@ -24,8 +45,8 @@ const playListSongs = songs.filter((song) => song.albumId === playlist?.albumId)
     <header class="flex flex-row gap-6">
       <picture class="aspect-square w-52 h-52 flex-none">
         <img
-          src={playlist?.cover}
-          alt={`${playlist?.title}`}
+          src={listOfTracks.length > 1 ? listOfimages[0].url : playlist?.cover}
+          alt={listOfTracks.length > 1 ? title : `${playlist?.title}`}
           class="object-cover w-full h-full rounded-md"
           transition:name=`playlist ${playlist?.id} image`
         />
@@ -34,7 +55,7 @@ const playListSongs = songs.filter((song) => song.albumId === playlist?.albumId)
         <h2 class="flex flex-1 items-end">Playlist</h2>
         <div>
           <h1 class="text-5xl font-bold block text-white">
-            {playlist?.title}
+            {listOfTracks.length > 1 ? title : `${playlist?.title}`}
             <span transition:name=`playlist ${playlist?.id} title`></span>
           </h1>
         </div>
@@ -45,8 +66,13 @@ const playListSongs = songs.filter((song) => song.albumId === playlist?.albumId)
               <span>{playlist?.artists.join(", ")}</span>
             </div>
             <p class="mt-1">
-              <span class="text-white">{playListSongs.length} songs</span>,
-              about 3 hr 15 min
+              <span class="text-white"
+                >{
+                  listOfTracks.length > 1
+                    ? listOfTracks.length
+                    : playListSongs.length
+                } songs</span
+              >, about {duration ?? "3 hr 15 min"}
             </p>
           </div>
         </div>
@@ -78,7 +104,13 @@ const playListSongs = songs.filter((song) => song.albumId === playlist?.albumId)
     </div>
 
     <section class="pt-6">
-      <SongListTable songs={playListSongs} />
+      {
+        listOfTracks.length > 1 ? (
+          <UserSongListTable tracks={listOfTracks} />
+        ) : (
+          <SongListTable songs={playListSongs} />
+        )
+      }
     </section>
 
     <!--  class="absolute inset-0 bg-gradient-to-t from-zinc-900 via-zinc-900/80 -z-[1]" -->

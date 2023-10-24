@@ -2,9 +2,26 @@
 import HomeIcon from "@/icons/Home.astro"
 import SearchIcon from "@/icons/Search.astro"
 import { playlists } from "@/lib/data"
+import type { Image, PlaylistType } from "@/types/types"
+import { getUser, getUserPlaylists } from "@/utils/user"
 import SideMenuCard from "./SideMenuCard.astro"
 import SideMenuItem from "./SideMenuItem.astro"
 import YourLibraryMenu from "./YourLibraryMenu.astro"
+import UserSideMenuCard from "./UserSideMenuCard.astro"
+
+let name = ""
+let image: Image[] = []
+let userPlaylists:PlaylistType[] = []
+const token = Astro.cookies.get("access_token")?.value
+if (token) {
+  const res = await getUser(token)
+  const playlistResponse = await getUserPlaylists(token)
+  userPlaylists = playlistResponse.items
+  const { display_name, images } = res
+  name = display_name
+  image.push(images[0])
+}
+
 ---
 
 <nav class="flex flex-col flex-1 gap-2">
@@ -24,7 +41,13 @@ import YourLibraryMenu from "./YourLibraryMenu.astro"
     <ul class="">
       <YourLibraryMenu href="/" />
 
-      {playlists.map((playlists) => <SideMenuCard playlist={playlists} />)}
+      {
+       userPlaylists.length>1 ?
+       userPlaylists.map(playlist => (
+            <UserSideMenuCard id={playlist.id} title={playlist.name} cover={playlist.images[0].url} owner={playlist.owner.display_name}/>
+          ))
+          :
+      playlists.map((playlists) => <SideMenuCard playlist={playlists} />)}
     </ul>
   </div>
 </nav>

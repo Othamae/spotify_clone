@@ -1,9 +1,44 @@
 ---
+import AvatarButton from "@/components/AvatarButton"
 import Greeting from "@/components/Greeting.astro"
+import LoginButton from "@/components/LoginButton"
 import PlaylistItemCard from "@/components/PlaylistItemCard.astro"
 import PlaylistItemSmallCard from "@/components/PlaylistItemSmallCard.astro"
+import UserPlaylistItemCard from "@/components/UserPlaylistItemCard.astro"
+import UserPlaylistItemSmallCard from "@/components/UserPlaylistItemSmallCard.astro"
 import { playlists } from "@/lib/data"
+import type { Image, PlaylistType } from "@/types/types"
+import { spotyfyAuthCall } from "@/utils/auth"
+import { getUser, getUserPlaylists } from "@/utils/user"
 import Layout from "../layouts/Layout.astro"
+
+const searchParams = Astro.url.searchParams
+const code = searchParams.get("code")
+
+if (code) {
+  const res = await spotyfyAuthCall(code)
+  const { access_token, refresh_token, expires_in } = res
+  if (access_token && refresh_token && expires_in) {
+    Astro.cookies.set("access_token", access_token)
+    Astro.cookies.set("refresh_token", refresh_token)
+  }
+}
+
+let name = ""
+let image: Image[] = []
+let userPlaylists:PlaylistType[] = []
+const token = Astro.cookies.get("access_token")?.value
+if (token) {
+  const res = await getUser(token)
+  const playlistResponse = await getUserPlaylists(token)
+  userPlaylists = playlistResponse.items
+  const { display_name, images } = res
+  name = display_name
+  image.push(images[0])
+}
+
+
+
 ---
 
 <Layout title="Spotify Clone">
@@ -16,17 +51,35 @@ import Layout from "../layouts/Layout.astro"
     >
     </div>
     <!-- Header / Login-->
-    <div class=""></div>
+    <div class="relative flex justify-end ">
+      {
+        name !== "" ? (
+          <>
+            <!--  <Avatar image={image[0]} />-->
+           <AvatarButton image={image[0]} client:visible /> 
+          </>
+        ) : (
+          <LoginButton client:visible />
+        )
+      }
+    </div>
     <div class="relative z-10 px-2 pt-12">
       <!-- Greeting  -->
       <Greeting />
       <!-- Playlist card -->
       <div class="grid grid-cols-3 gap-3">
         {
-          playlists.map((playlist) => (
+          userPlaylists.length>1 ?
+          userPlaylists.map(playlist => (
+            <UserPlaylistItemSmallCard id={playlist.id} title={playlist.name} cover={playlist.images[0].url}/>
+          ))
+          :
+             playlists.map((playlist) => (
             <PlaylistItemSmallCard playlist={playlist} />
           ))
+          
         }
+      
       </div>
 
       <!-- ForYou  -->
@@ -34,8 +87,18 @@ import Layout from "../layouts/Layout.astro"
 
       <!-- Playlist square -->
       <div class="flex flex-wrap mt-6 gap-4">
-        {playlists.map((playlist) => <PlaylistItemCard playlist={playlist} />)}
+        {
+          userPlaylists.length>1 ?
+          userPlaylists.map(playlist => (
+            <UserPlaylistItemCard id={playlist.id} title={playlist.name} cover={playlist.images[0].url} owner={playlist.owner.display_name}/>
+          ))
+          :
+          playlists.map((playlist) => <PlaylistItemCard playlist={playlist} />)          
+          
+        }
+
       </div>
     </div>
   </div>
 </Layout>
+
