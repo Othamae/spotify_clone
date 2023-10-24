@@ -1,0 +1,32 @@
+---
+
+interface Props {
+  id: string, 
+  title: string,
+  cover: string,
+  owner: string
+}
+
+const { id, title, cover, owner } = Astro.props
+
+
+
+//const artistListString = artists.join(", ")
+---
+
+<a
+  href={`/playlist/${id}`}
+  class="playlist-item flex relative p-2 overflow-hidden items-center gap-3 rounded-md hover:bg-zinc-800"
+>
+  <picture class="h-12 w-12">
+    <img
+      src={cover}
+      alt={`${title}`}
+      class="object-cover w-full h-full rounded-md"
+    />
+  </picture>
+  <div class="flex flex-auto flex-col truncate">
+    <h4 class="text-md">{title}</h4>
+    <span class="text-sm text-zinc-400">By {owner}</span>
+  </div>
+</a>
